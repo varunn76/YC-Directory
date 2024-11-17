@@ -1,5 +1,7 @@
-import SeachForm from "@/components/SeachForm";
-import StartupCard from "@/components/StartupCard";
+import SeachForm from '@/components/SeachForm';
+import StartupCard, { StartupCardType } from '@/components/StartupCard';
+import { sanityFetch, SanityLive } from '@/sanity/lib/live';
+import { STARTUP_QUERY } from '@/sanity/lib/quires';
 
 export default async function Home({
   searchParams,
@@ -7,44 +9,36 @@ export default async function Home({
   searchParams: Promise<{ query?: string }>;
 }) {
   const query = (await searchParams).query;
-  const posts = [
-    {
-      _createdAt: "Yesterday",
-      views: 55,
-      author: { _id: 1 },
-      _id: 1,
-      description: "This is description",
-      image: "",
-      cateory: "Robots",
-      title: "We Robots",
-    },
-  ];
+  const params = { search: query || null };
+  const { data: posts } = await sanityFetch({ query: STARTUP_QUERY, params });
+
   return (
     <>
-      <section className="pink_container">
-        <h1 className="heading">
+      <section className='pink_container'>
+        <h1 className='heading'>
           Pitch Your Startup, <br /> Connect with Entrepreneur
         </h1>
-        <p className="sub-heading !max-w-3xl">
+        <p className='sub-heading !max-w-3xl'>
           Submit Ideas, Vote on Pitches, and Get Noticed in Virtual
           Compititions.
         </p>
         <SeachForm query={query} />
       </section>
-      <section className="section_container">
-        <p className="text-30-semibold">
-          {query ? `Search results for ${query}` : "All Results"}
+      <section className='section_container'>
+        <p className='text-30-semibold'>
+          {query ? `Search results for ${query}` : 'All Results'}
         </p>
-        <ul className="mt-7 card_grid">
+        <ul className='card_grid mt-7'>
           {posts.length > 0 ? (
             posts.map((posts: StartupCardType) => (
-              <StartupCard key={posts._id} posts={posts} />
+              <StartupCard key={posts?._id} posts={posts} />
             ))
           ) : (
-            <p className="no-results">No startups found</p>
+            <p className='no-results'>No startups found</p>
           )}
         </ul>
       </section>
+      <SanityLive />
     </>
   );
 }
