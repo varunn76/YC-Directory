@@ -20,6 +20,8 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   if (!post) return notFound();
   const parsedContent = md.render(post?.pitch || '');
+  console.log('process.env.SAITY_WRITE_TOKEN;', process.env.SAITY_WRITE_TOKEN);
+
   return (
     <>
       <section className='pink_container !min-h-[230px]'>
@@ -67,6 +69,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
         <hr className='divider' />
         {/* TODO: EDITOR SELECTED STARTUPS */}
+
         <Suspense fallback={<Skeleton className='view_skeleton' />}>
           <View id={id} />
         </Suspense>
