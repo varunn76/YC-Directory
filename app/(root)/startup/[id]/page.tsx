@@ -42,7 +42,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
               className='mb-3 flex items-center gap-2'
             >
               <Image
-                src={post.author.image}
+                src={post.author?.image}
                 alt='avatar'
                 width={64}
                 height={64}
