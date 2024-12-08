@@ -16,5 +16,5 @@ const SearchFormReset = () => {
     </button>
   );
 };
-``;
+
 export default SearchFormReset;
