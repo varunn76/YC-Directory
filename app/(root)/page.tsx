@@ -1,8 +1,9 @@
 import { auth } from '@/auth';
-import SeachForm from '@/components/SeachForm';
+import SearchForm from '@/components/SeachForm';
 import StartupCard, { StartupCardType } from '@/components/StartupCard';
 import { sanityFetch, SanityLive } from '@/sanity/lib/live';
-import { STARTUP_QUERY } from '@/sanity/lib/quires';
+
+import { STARTUPS_QUERY } from '@/sanity/lib/quires';
 
 export default async function Home({
   searchParams,
@@ -13,36 +14,43 @@ export default async function Home({
   const params = { search: query || null };
 
   const session = await auth();
+
   console.log(session?.id);
 
-  const { data: posts } = await sanityFetch({ query: STARTUP_QUERY, params });
+  const { data: posts } = await sanityFetch({ query: STARTUPS_QUERY, params });
 
   return (
     <>
       <section className='pink_container'>
         <h1 className='heading'>
-          Pitch Your Startup, <br /> Connect with Entrepreneur
+          Pitch Your Startup, <br />
+          Connect With Entrepreneurs
         </h1>
+
         <p className='sub-heading !max-w-3xl'>
           Submit Ideas, Vote on Pitches, and Get Noticed in Virtual
-          Compititions.
+          Competitions.
         </p>
-        <SeachForm query={query} />
+
+        <SearchForm query={query} />
       </section>
+
       <section className='section_container'>
         <p className='text-30-semibold'>
-          {query ? `Search results for ${query}` : 'All Results'}
+          {query ? `Search results for "${query}"` : 'All Startups'}
         </p>
+
         <ul className='card_grid mt-7'>
-          {posts.length > 0 ? (
-            posts.map((posts: StartupCardType) => (
-              <StartupCard key={posts?._id} posts={posts} />
+          {posts?.length > 0 ? (
+            posts.map((post: StartupCardType) => (
+              <StartupCard key={post?._id} posts={post} />
             ))
           ) : (
             <p className='no-results'>No startups found</p>
           )}
         </ul>
       </section>
+
       <SanityLive />
     </>
   );
